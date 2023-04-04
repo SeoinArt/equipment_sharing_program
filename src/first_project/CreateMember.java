@@ -139,7 +139,7 @@ public class CreateMember extends JFrame {
 					} catch (DuplicateException e) {
 						e.printStackTrace();
 						JOptionPane.showMessageDialog(cp, "아이디가 이미 존재합니다.");
-						return;
+						break;
 					}
 				}
 				if (i == 2) {
@@ -148,7 +148,7 @@ public class CreateMember extends JFrame {
 					} catch (InconsistencyException e) {
 						e.printStackTrace();
 						JOptionPane.showMessageDialog(cp, "비밀번호가 다릅니다");
-						return;
+						break;
 					}
 				}
 				text[i] = ta[i].getText();
