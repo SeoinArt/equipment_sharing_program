@@ -2,6 +2,8 @@ package first_project;
 
 import javax.swing.*;
 
+import Error.*;
+
 import java.awt.*;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -55,24 +57,47 @@ public class MyLayout extends JFrame {
 		btnPanel.add(b1);
 
 		b1.addActionListener(event -> {
-			setTitle("회원가입");
 			CreateMember CM = new CreateMember(this,use);
 			setVisible(false);
 			
 		});
 		b2.addActionListener(event -> {
-			setTitle("로그인");
-			for(int i=0;i<a.length;i++) {
-				System.out.println(a[i]);
+			try {
+				checkId(idText.getText());
+			} catch (NoUserName e) {
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(cp, "아이디 또는 비밀번호가 틀렸습니다.");
 			}
 		});
 		b3.addActionListener(event -> {
-			setTitle("아이디");
+			ChangeId ci = new ChangeId(this,use);
+			setVisible(false);
 		});
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}// 생성자-------------------
 
+	
+	void checkId(String idText) throws NoUserName{
+		if(!use.containsKey(idText) ) {
+			throw new NoUserName();
+		}
+		else {
+			try {
+				checkPwd(use.get(idText));
+			} catch (InconsistencyException e) {
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(cp, "아이디 또는 비밀번호가 틀렸습니다.");
+			}
+		}
+	}
+	void checkPwd(User user) throws InconsistencyException {
+		String pwd = new String(pwdText.getPassword());
+		if(!user.getPasswd().equals(pwd)) {
+			throw new InconsistencyException();
+		}
+	}
+	
 	public static void main(String[] args) {
 		MyLayout my = new MyLayout();
 		Dimension res = Toolkit.getDefaultToolkit().getScreenSize();

@@ -75,8 +75,7 @@ public class CreateMember extends JFrame {
 		jp[14].add(commit = new JButton("생성"));
 		jp[14].add(reset = new JButton("Reset"));
 
-		last.addActionListener(evemt -> {
-			setTitle("이전");
+		last.addActionListener(event -> {
 			jm.setVisible(true);
 			dispose();
 

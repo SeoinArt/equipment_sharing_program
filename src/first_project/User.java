@@ -30,10 +30,18 @@ public class User {
 		public String getName() {
 			return name;
 		}
+		public String getPasswd() {
+			return passwd;
+		}
 		public String getAddr() {
 			return addr;
 		}
 		public String getTel() {
 			return tel;
+		}
+		public String[] getAll() {
+			String[] str = {getId(),getName(),getTel()};
+			return str;
+			
 		}
 }
