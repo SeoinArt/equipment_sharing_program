@@ -1,4 +1,4 @@
-package First_project;
+package first_project;
 
 public class User {
 	

@@ -1,6 +1,7 @@
-package First_project;
+package first_project;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
