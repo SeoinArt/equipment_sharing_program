@@ -1,4 +1,4 @@
-package first_project;
+package ShareObject;
 
 public class Raspberry extends Equipment {
 	private int gpio;
@@ -18,6 +18,11 @@ public class Raspberry extends Equipment {
 
 	public int getUsbType() {
 		return usbType;
+	}
+
+	@Override
+	int getTotla() {	
+		return 4;
 	}
 
 }

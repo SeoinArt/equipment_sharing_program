@@ -1,11 +1,17 @@
-package first_project;
+package MainFrame;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.Insets;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -13,6 +19,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
+
+import ShareObject.User;
 
 
 
@@ -24,16 +33,16 @@ public class Share extends JFrame{
 	JTextArea ta; // 중앙
 
 	
-	JPanel pN_sub = new JPanel(new GridLayout(2,1));
+	JPanel pN_sub = new JPanel();
 	JPanel pN_sub_1 = new JPanel();
-	JPanel pN_sub_2 = new JPanel();
+
 	
 	JLabel lbTitle, lbName, lbDate, lbNo, lbMsg;
 	JButton btAdd, btList, btDel, btEdit, btEditEnd, btFind;
 
 	JTextField tfName, tfDate, tfNo, tfMsg;
 
-	public Share() {
+	public Share(User use) {
 		super("::MemoAppView::");
 		cp = this.getContentPane();
 
@@ -52,48 +61,60 @@ public class Share extends JFrame{
 		
 		pN.add(pN_sub);
 		pN_sub.add(pN_sub_1);
-		pN_sub.add(pN_sub_2);
+
 		
 		
-		pN_sub_1.setLayout(new FlowLayout(FlowLayout.LEFT));
+		pN_sub_1.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		pN_sub_1.add(lbName = new JLabel("신청자: "));
 		pN_sub_1.add(tfName = new JTextField(15));
-//		tfName.setText(use.getId());
+		tfName.setText(use.getId());
+		tfName.setHorizontalAlignment(JTextField.CENTER);
+		tfName.setEditable(false);
 		
-		pN_sub_1.add(lbDate = new JLabel("작성일: "));
+		pN_sub_1.add(lbDate = new JLabel("User: "));
 		pN_sub_1.add(tfDate = new JTextField(10));
-		
-		
-		pN_sub_1.add(lbNo = new JLabel("글 번호: "));
-		pN_sub_1.add(tfNo = new JTextField(10));
-		
-		
-		pN_sub_2.setLayout(new FlowLayout(FlowLayout.LEFT));
-		pN_sub_2.add(lbMsg = new JLabel("메모 내용: "));
-		pN_sub_2.add(tfMsg = new JTextField(40));
-		pN_sub_2.add(btAdd = new JButton("글 등록"));
-		pN_sub_2.add(btList = new JButton("글 목록"));
-		
-
 		
 		tfDate.setEditable(false);
 		tfDate.setForeground(Color.blue);
 		tfDate.setFont(new Font("Serif",Font.BOLD,14));
 		tfDate.setHorizontalAlignment(JTextField.CENTER);
-		tfDate.setText("2023-03-31");
-		tfNo.setEditable(false);
+		String date = this.getSysDate();
+		tfDate.setText(date);
 		
-		pS.add(btDel = new JButton("글 삭제"));
-		pS.add(btEdit = new JButton("글 수정"));
-		pS.add(btEditEnd = new JButton("글 수정 처리"));
-		pS.add(btFind = new JButton("글 검색"));
+		
+		pS.setLayout(new GridLayout(1,3,20,20));
+		pS.setBorder(BorderFactory.createEmptyBorder(10 , 10 , 10 , 10));
+		pS.add(btDel = new JButton("신청"));
+		btDel.addActionListener(event ->{
+			Stock st = new Stock(use); 
+			
+			
+		});
+		pS.add(btEditEnd = new JButton("제공"));
+		pS.add(btEdit = new JButton("내역"));
+		
 		
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
+	public String getSysDate() {
+		Date today = new Date(); // java.util.Date 
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String str = sdf.format(today);
+		return str;
+		
+	}
 
 	public static void main(String[] args) {
-		Share my = new Share();
+		User use = new User();
+		String str = "a";
+		use.setAddr(str);
+		use.setId(str);
+		use.setName(str);
+		use.setTel(str);
+		
+		Share my = new Share(use);
+		
 		my.setSize(800, 500);
 		my.setLocationRelativeTo(null);
 		my.setVisible(true);

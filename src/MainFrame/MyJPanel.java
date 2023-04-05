@@ -1,4 +1,4 @@
-package first_project;
+package MainFrame;
 import java.awt.Insets;
 
 import javax.swing.*;
@@ -11,10 +11,7 @@ public class MyJPanel extends JPanel{
 		
 	}
 	public MyJPanel(int a, int b, int c, int d) {
-		this.a=a;
-		this.b=b;
-		this.c=c;
-		this.d=d;
+		this.setBorder(BorderFactory.createEmptyBorder(a , b , c , d));
 	}
 	
 	

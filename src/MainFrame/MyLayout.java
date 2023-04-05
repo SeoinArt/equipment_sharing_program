@@ -1,8 +1,9 @@
-package first_project;
+package MainFrame;
 
 import javax.swing.*;
 
 import Error.*;
+import ShareObject.User;
 
 import java.awt.*;
 import java.awt.Dimension;

@@ -1,4 +1,4 @@
-package first_project;
+package ShareObject;
 
 public class User {
 	

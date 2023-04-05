@@ -1,6 +1,6 @@
-package first_project;
+package ShareObject;
 
-public class Equipment {
+abstract public class Equipment {
 	private String etype;
 	private String edetailType;
 	
@@ -21,6 +21,7 @@ public class Equipment {
 		return edetailType;
 	}
 	
+	abstract int getTotla();
 	
 	
 }

@@ -1,4 +1,4 @@
-package first_project;
+package ShareObject;
 
 public class Ardino extends Equipment {
 	private int analogPin;
@@ -27,6 +27,11 @@ public class Ardino extends Equipment {
 
 	public void setUsbType(String usbType) {
 		this.usbType = usbType;
+	}
+
+	@Override
+	int getTotla() {
+		return 5;
 	}
 
 }

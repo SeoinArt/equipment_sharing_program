@@ -1,4 +1,4 @@
-package first_project;
+package MainFrame;
 
 import java.awt.*;
 
@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 import javax.swing.*;
 import Error.*;
+import ShareObject.User;
 
 public class CreateMember extends JFrame {
 	private Container cp;
