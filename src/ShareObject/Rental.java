@@ -3,6 +3,17 @@ package ShareObject;
 public class Rental {
 	private int count;
 	private Equipment eq;
+	
+	public Rental(String count2, Equipment qp) {
+		this.count = Integer.valueOf(count2);
+		this.eq = qp;
+	}
+	
+	public Rental(int c, Equipment eq) {
+		this.count = c;
+		this.eq = eq;
+	}
+	
 	public int getCount() {
 		return count;
 	}

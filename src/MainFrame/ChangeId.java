@@ -56,6 +56,8 @@ public class ChangeId extends JFrame {
 		search.addActionListener(event -> {
 			try {
 				checkText(use, jt);
+				jm.setVisible(true);
+				dispose();
 			} catch (OmmisionException | InconsistencyException e) {
 				e.printStackTrace();
 				JOptionPane.showMessageDialog(cp, "아이디가 존재하지 않거나 정보가 다릅니다.");
@@ -74,6 +76,13 @@ public class ChangeId extends JFrame {
 		setResizable(false);
 	}
 
+	/**
+	 * @param use
+	 * @param jt
+	 * @throws OmmisionException
+	 * @throws InconsistencyException
+	 * textField에 값이 전부 입력되었는지 확인하고, 비밀번호를 변경하는 메서드
+	 */
 	public void checkText(HashMap<String, User> use, JTextField[] jt) throws OmmisionException, InconsistencyException {
 
 		for (int i = 0; i < jt.length; i++) {
@@ -93,9 +102,12 @@ public class ChangeId extends JFrame {
 		for (;;) {
 			pawd = JOptionPane.showInputDialog("비밀번호를 입력하세요");
 			if (!(pawd.trim().equals(""))) {
+				User a = use.get(jt[0].getText());
+				a.setPasswd(pawd);
 				break;
 			}
 		}
+		
 
 		JOptionPane.showMessageDialog(cp, "비밀번호가 변경되었습니다.");
 	}

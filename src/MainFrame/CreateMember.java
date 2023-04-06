@@ -102,30 +102,57 @@ public class CreateMember extends JFrame {
 		setLocationRelativeTo(null);
 		setResizable(false);
 
-	}// 생성자-------------------
-
+	}/**
+	 생성자-------------------
+	 */
+	
+	/**
+	 * 
+	 * @param id
+	 * @param use
+	 * @throws DuplicateException
+	 * 아이디의 중복을 확인하는 메서드
+	 */
+	
 	void checkId(String id, HashMap<String, User> use) throws DuplicateException {
 		if (use.containsKey(id)) {
 			throw new DuplicateException();
 		}
 	}
-	// 아이디 중복 체크
+	
+	/**
+	 * 
+	 * @param fPwd
+	 * @param SPwd
+	 * @throws InconsistencyException
+	 * 
+	 * 패스워드와 패드워드 확인 필드의 내용이 같은지 확인하는 메서드
+	 */
 
 	void checkPasswd(String fPwd, String SPwd) throws InconsistencyException {
 		if (!fPwd.equals(SPwd)) {
 			throw new InconsistencyException();
 		}
 	}
-	// 패스워드 비교 체크
-
+	
+	/**
+	 * 
+	 * @param ta
+	 * 텍스트 필드를 클리어하는 메서드
+	 */
 	void textFieldReset(TextField[] ta) {
 		for (int i = 0; i < ta.length; i++) {
 			ta[i].setText("");
 		}
 	}
-	// textField clear
+	/**
+	 * 
+	 * @param use
+	 * @throws OmmisionException
+	 * textField 내용을 string으로 가져오는 method
+	 */
 
-	// textField 내용을 string으로 가져오는 method
+
 	void textFieldGetText(HashMap<String, User> use) throws OmmisionException {
 		for (int i = 0; i < ta.length; i++) {
 			if (ta[i].getText().equals("")){ 
@@ -160,6 +187,12 @@ public class CreateMember extends JFrame {
 		
 		
 	}
+	/**
+	 * 
+	 * @param text
+	 * @param use
+	 * 입력한 텍스트필드의 내용을 회원정보데 업데이트 하는 메서드
+	 */
 
 	void addUser(String[] text, HashMap<String, User> use) {
 		User us = new User();

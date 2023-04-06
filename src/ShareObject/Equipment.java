@@ -22,6 +22,7 @@ abstract public class Equipment {
 	}
 	
 	abstract int getTotla();
+	abstract String[] getArea();
 	
 	
 }

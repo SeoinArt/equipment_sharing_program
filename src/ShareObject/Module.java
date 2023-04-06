@@ -12,4 +12,12 @@ public class Module extends Equipment{
 		return 2;
 	}
 
+	@Override
+	public String[] getArea() {
+		String[] str =new String[2];
+		str[0] = getEtype();
+		str[1] = getEdetailType();
+		return str;
+	}
+
 }

@@ -3,6 +3,8 @@ package MainFrame;
 import javax.swing.*;
 
 import Error.*;
+import ShareObject.Rental;
+import ShareObject.Supple;
 import ShareObject.User;
 
 import java.awt.*;
@@ -12,18 +14,23 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 
 public class MyLayout extends JFrame {
-
+	static HashMap<String,Rental> ID_Rental = new HashMap<>();
+	static HashMap<String,Supple> ID_Supple = new HashMap<>();
+	static HashMap<String, User> use = new HashMap<>();
+	
+	
 	Container cp;
-
 	MyJPanel pm = new MyJPanel();
-	HashMap<String, User> use = new HashMap<>();
+	
 
 	JLabel id, pwd;
 	JTextField idText;
 	JPasswordField pwdText;
 	JButton b1, b2, b3;
 	int[] a= new int[5];
-
+/**
+ * 생성자 메서드
+ */
 	public MyLayout() {
 		super(":: 비품 공유 시스템::");
 		cp = getContentPane();
@@ -65,10 +72,11 @@ public class MyLayout extends JFrame {
 		b2.addActionListener(event -> {
 			try {
 				checkId(idText.getText());
-				Share sh = new Share(use.get(idText.getText()));
+				
 			} catch (NoUserName e) {
 				e.printStackTrace();
 				JOptionPane.showMessageDialog(cp, "아이디 또는 비밀번호가 틀렸습니다.");
+				return;
 			}
 		});
 		b3.addActionListener(event -> {
@@ -77,8 +85,11 @@ public class MyLayout extends JFrame {
 		});
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}// 생성자-------------------
+	}
 
+	
+	/** 회원정보의 존재 유무 찾는 메서드
+	 */
 	
 	void checkId(String idText) throws NoUserName{
 		if(!use.containsKey(idText) ) {
@@ -87,17 +98,24 @@ public class MyLayout extends JFrame {
 		else {
 			try {
 				checkPwd(use.get(idText));
+				Share sh = new Share(this,use.get(idText),ID_Rental,ID_Supple);
+				setVisible(false);
 			} catch (InconsistencyException e) {
 				e.printStackTrace();
 				JOptionPane.showMessageDialog(cp, "아이디 또는 비밀번호가 틀렸습니다.");
 			}
 		}
 	}
+	/** 아이디와 비밀번호가 매칭되는지 확인하는 메서드
+	 */
+	
 	void checkPwd(User user) throws InconsistencyException {
 		String pwd = new String(pwdText.getPassword());
 		if(!user.getPasswd().equals(pwd)) {
 			throw new InconsistencyException();
 		}
+		idText.setText("");;
+		pwdText.setText("");;
 	}
 	
 	public static void main(String[] args) {

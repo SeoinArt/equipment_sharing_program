@@ -3,6 +3,10 @@ package ShareObject;
 public class Supple {
 	private int count;
 	private Equipment eq;
+	public Supple(String count, Equipment qp) {
+		this.count = Integer.valueOf(count);
+		this.eq = qp;
+	}
 	public int getCount() {
 		return count;
 	}

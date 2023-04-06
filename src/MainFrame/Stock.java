@@ -2,6 +2,7 @@ package MainFrame;
 
 import javax.swing.*;
 
+import Error.DuplicateException;
 import Error.OmmisionException;
 import ShareObject.*;
 import ShareObject.Module;
@@ -21,7 +22,7 @@ public class Stock extends JFrame implements ItemListener {
 	JLabel[] m1 = new JLabel[5];
 	JPanel[] n1 = new JPanel[5];
 	ButtonGroup bg;
-	JRadioButton Supple, Rental;
+	JRadioButton sup, ren;
 	JLabel jId, jEquip, jName, jCount;
 	JTextField tfId, tfName, tfTel, tfcon;
 	JTextField[] tf = new JTextField[5];
@@ -33,38 +34,38 @@ public class Stock extends JFrame implements ItemListener {
 
 	Rental re;
 	Supple sp;
-	Equipment ep = null;
-	boolean rad = true;
 
 	int index = 0;
-	int check = (index == 0) ? 5 : (index == 1) ? 4 : 2;
+	int check = 5;
+	int radioCheck = 0;
 
-	public Stock(JFrame jm,User use, HashMap<String, Rental> rental2, HashMap<String, Supple> supple2) {
-		super("::MemoAppView::");
+	public Stock(JFrame jf, User use, HashMap<String, Rental> ID_Rental, HashMap<String, Supple> ID_Supple) {
+		super("::신청 페이지::");
 		cp = this.getContentPane();
 		cp.add(p, "North");
 		n = new JPanel();
 		n.setLayout(new BorderLayout());
 		cp.add(n, "Center");
 		cp.add(c, "South");
-		Rental = new JRadioButton("Rental");
-		Rental.addItemListener(this);
-		Supple = new JRadioButton("Supple");
-		Supple.addItemListener(this);
+		ren = new JRadioButton("Rental");
+		ren.addItemListener(this);
+		sup = new JRadioButton("Supple");
+		sup.addItemListener(this);
 
 		bg = new ButtonGroup();
-		bg.add(Rental);
-		bg.add(Supple);
-		p.add(Rental);
-		p.add(Supple);
+		bg.add(ren);
+		bg.add(sup);
+		p.add(ren);
+		p.add(sup);
 		p.add(p_1 = new JPanel());
 		p_1.add(jEquip = new JLabel("부품 : "));
 		jcb = new JComboBox<>(str);
 		p_1.add(jcb);
-
+//------------------------------------------------------------------------------------------
 		jcb.addActionListener(e -> {
 			JComboBox<String> cb = (JComboBox<String>) e.getSource();
 			index = cb.getSelectedIndex();
+			tf[0].setText((str[index]));
 			check = (index == 0) ? 5 : (index == 1) ? 4 : 2;
 			changeText(index);
 
@@ -82,6 +83,7 @@ public class Stock extends JFrame implements ItemListener {
 		n.add(n_1, "North");
 		n_1.add(new JLabel("아이디 : "));
 		n_1.add(tfId = new JTextField(10));
+		tfId.setEnabled(false);
 		tfId.setText(use.getId());
 		tfId.setEditable(false);
 
@@ -94,7 +96,8 @@ public class Stock extends JFrame implements ItemListener {
 			n1[i].add(m1[i] = new JLabel(nameing[i]));
 			n1[i].add(tf[i] = new JTextField(10));
 		}
-
+		tf[0].setText(str[0]);
+		tf[0].setEditable(false);
 		n_1.add(new JLabel("수량 : "));
 		n_1.add(tfcon = new JTextField(10));
 
@@ -103,49 +106,39 @@ public class Stock extends JFrame implements ItemListener {
 		c.add(c2 = new JPanel());
 		c1.setLayout(new FlowLayout(FlowLayout.LEFT));
 		c2.setLayout(new FlowLayout(FlowLayout.CENTER));
+
 		c1.add(before = new JButton("이전"));
 		before.setPreferredSize(new Dimension(80, 30));
 		c2.add(commit = new JButton("신청"));
 
+		before.addActionListener(event -> {
+			showFrame(jf, this);
+		});
+
 		commit.addActionListener(event -> {
 			try {
-				checkText();
-				ep = getText(index);
-					if (rad) {
-						re.setCount(Integer.parseInt(tfcon.getText()));
-						
-					if (!rental2.containsKey(tfId.getText())) {
-						re.setEq(ep);
-						rental2.put(tfId.getText(), re);
-						textClear();
-						jm.setVisible(true);
-						dispose();
-					} 
-					else  JOptionPane.showMessageDialog(this, "더이상 신청할 수 없습니다.");	
-					}
-				else {
-					sp.setCount(Integer.parseInt(tfcon.getText()));
-					if (!supple2.containsKey(tfId.getText())) {
-						sp.setEq(ep);
-						supple2.put(tfId.getText(), sp);
-						textClear();
-						jm.setVisible(true);
-						dispose();
-					}
-					else JOptionPane.showMessageDialog(this, "더이상 신청할 수 없습니다.");
-						
+				checkText(); // 공백 체크
+				if (radioCheck == 0) {
+					throw new DuplicateException();
 				}
-				
-			} catch (OmmisionException e1) {
-				JOptionPane.showMessageDialog(this, "입력을 해주세요");
-				e1.printStackTrace();}
-			catch(NumberFormatException e2) {
-				JOptionPane.showMessageDialog(this, "수량은 숫자로 입력해주세요");
-			}catch(NullPointerException e3) {
-				JOptionPane.showMessageDialog(this, "라디오 버튼을 클릭해주세요");
+				Equipment qp = getText(index);
+				String count = tfcon.getText().trim();
+
+				if (radioCheck == 1) {
+					ID_Rental.put(use.getId(), new Rental(count, qp));
+				} else {
+					ID_Supple.put(use.getId(), new Supple(count, qp));
+				}
+				JOptionPane.showMessageDialog(this, "정상적으로 추가되었습니다.");
+				showFrame(jf, this);
+			} catch (OmmisionException e) {
+				JOptionPane.showMessageDialog(this, "공백이 존재합니다");
+			} catch (DuplicateException e1) {
+				JOptionPane.showMessageDialog(this, "라디오 버튼을 클릭하세요");
+			} catch (NumberFormatException e2) {
+				JOptionPane.showMessageDialog(this, "수량은 숫자입니다");
 			}
-			
-			});
+		});
 
 		commit.setPreferredSize(new Dimension(80, 30));
 		setSize(400, 500);
@@ -155,15 +148,49 @@ public class Stock extends JFrame implements ItemListener {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
+//	public void checkKey(User use, HashMap<String, Rental> ID_Rental, HashMap<String, Supple> ID_Supple) {
+//		if (ID_Rental.containsKey(use.getId())) {
+//			System.out.println("rental 이미 있음");
+//		} else
+//			System.out.println("rental 아직 없음");
+//		if (ID_Supple.containsKey(use.getId())) {
+//			System.out.println("supple 이미 있음");
+//		} else
+//			System.out.println("supple 아직 없음");
+//	}	
+	
+	
+	/**
+	 * 
+	 * @param jp
+	 * @param s
+	 * @param str 패널에 패널을 붙이고 붙인 패널에 라벨을 넣는 메서드
+	 */
+	
+
 	public void infoLabel(JPanel jp, JPanel s, String str) {
-		jp.add(s, "");
+		jp.add(s);
 		s.add(new JLabel(str));
 	}
 
-	public void infoLabel(JPanel s, String str) {
-		s.add(new JLabel(str));
+	/**
+	 * 텍스트 필드의 공백 체크 메서드
+	 * 
+	 * @throws OmmisionException
+	 */
+	public void checkText() throws OmmisionException {
+		for (int i = 0; i < check; i++) {
+			if (tf[i].getText().trim().equals("") || tfcon.getText().trim().equals("")) {
+				throw new OmmisionException();
+			}
+		}
 	}
 
+	/**
+	 * 체크박스를 클릭하면 textField가 바뀌는 메서드
+	 * 
+	 * @param index
+	 */
 	public void changeText(int index) {
 		if (index == 1) {
 			for (int i = 2; i < 5; i++) {
@@ -190,14 +217,51 @@ public class Stock extends JFrame implements ItemListener {
 			}
 
 	}
-	
+
+	/**
+	 * 텍스트필드 전체 클리어 메서드
+	 */
 	public void textClear() {
 		tfcon.setText("");
-		for (int i = 0; i<tf.length; i++) {
+		for (int i = 0; i < tf.length; i++) {
 			tf[i].setText("");
 		}
 	}
-	
+
+	/**
+	 * 프레임 전환 메서드
+	 * 
+	 * @param jm
+	 * @param i
+	 */
+
+	public void showFrame(JFrame jm, JFrame i) {
+		jm.setVisible(true);
+		i.dispose();
+	}
+
+	/**
+	 * 라디오버튼 이벤트
+	 */
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		if (ren.isSelected()) {
+			System.out.println("ren 클릭");
+			radioCheck = 1;
+		} else if (sup.isSelected()) {
+			System.out.println("sup 클릭");
+			radioCheck = 2;
+		}
+
+	}
+
+	/**
+	 * 텍스트 필드의 값으로 Equipment 객체를 만드는 메서드
+	 * 
+	 * @param index
+	 * @return
+	 */
+
 	public Equipment getText(int index) {
 		int check = (index == 0) ? 5 : (index == 1) ? 4 : 2;
 		String[] str = new String[check];
@@ -218,24 +282,6 @@ public class Stock extends JFrame implements ItemListener {
 			epa = c;
 		}
 		return epa;
-	}
-
-	public void checkText() throws OmmisionException {
-		for (int i = 0; i < check; i++) {
-			if (tf[i].getText().trim().equals("") || tfcon.getText().trim().equals("")) {
-				throw new OmmisionException();
-			}
-		}
-	}
-
-	@Override
-	public void itemStateChanged(ItemEvent e) {
-		if (Rental.isSelected()) {
-			re = new Rental();
-		} else if (Supple.isSelected()) {
-			sp = new Supple();
-		}
-
 	}
 
 }
