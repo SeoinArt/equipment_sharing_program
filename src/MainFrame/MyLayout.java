@@ -65,6 +65,7 @@ public class MyLayout extends JFrame {
 		b2.addActionListener(event -> {
 			try {
 				checkId(idText.getText());
+				Share sh = new Share(use.get(idText.getText()));
 			} catch (NoUserName e) {
 				e.printStackTrace();
 				JOptionPane.showMessageDialog(cp, "아이디 또는 비밀번호가 틀렸습니다.");

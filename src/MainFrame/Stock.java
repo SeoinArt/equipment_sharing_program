@@ -2,12 +2,16 @@ package MainFrame;
 
 import javax.swing.*;
 
-import ShareObject.User;
+import Error.OmmisionException;
+import ShareObject.*;
+import ShareObject.Module;
 
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.HashMap;
 
-public class Stock extends JFrame {
+public class Stock extends JFrame implements ItemListener {
 
 	Container cp;
 	JPanel p = new JPanel(), p_1, n;
@@ -19,15 +23,23 @@ public class Stock extends JFrame {
 	ButtonGroup bg;
 	JRadioButton Supple, Rental;
 	JLabel jId, jEquip, jName, jCount;
-	JTextField tfId, tfName, tfTel;
+	JTextField tfId, tfName, tfTel, tfcon;
 	JTextField[] tf = new JTextField[5];
 	JButton before, commit;
 
-	String str[] = { "Ardiono", "Raspberry", "Module" };
+	String str[] = { "Arduiono", "Raspberry", "Module" };
 	String nameing[] = { "Type", "detailType", "analogPin", "digitalPin", "usbType" };
 	JComboBox<String> jcb;
-	int index;
-	public Stock(User use) {
+
+	Rental re;
+	Supple sp;
+	Equipment ep = null;
+	boolean rad = true;
+
+	int index = 0;
+	int check = (index == 0) ? 5 : (index == 1) ? 4 : 2;
+
+	public Stock(JFrame jm,User use, HashMap<String, Rental> rental2, HashMap<String, Supple> supple2) {
 		super("::MemoAppView::");
 		cp = this.getContentPane();
 		cp.add(p, "North");
@@ -36,7 +48,9 @@ public class Stock extends JFrame {
 		cp.add(n, "Center");
 		cp.add(c, "South");
 		Rental = new JRadioButton("Rental");
+		Rental.addItemListener(this);
 		Supple = new JRadioButton("Supple");
+		Supple.addItemListener(this);
 
 		bg = new ButtonGroup();
 		bg.add(Rental);
@@ -51,6 +65,7 @@ public class Stock extends JFrame {
 		jcb.addActionListener(e -> {
 			JComboBox<String> cb = (JComboBox<String>) e.getSource();
 			index = cb.getSelectedIndex();
+			check = (index == 0) ? 5 : (index == 1) ? 4 : 2;
 			changeText(index);
 
 		});
@@ -81,7 +96,7 @@ public class Stock extends JFrame {
 		}
 
 		n_1.add(new JLabel("수량 : "));
-		n_1.add(tfId = new JTextField(10));
+		n_1.add(tfcon = new JTextField(10));
 
 		c.setLayout(new GridLayout(1, 2));
 		c.add(c1 = new JPanel());
@@ -91,6 +106,47 @@ public class Stock extends JFrame {
 		c1.add(before = new JButton("이전"));
 		before.setPreferredSize(new Dimension(80, 30));
 		c2.add(commit = new JButton("신청"));
+
+		commit.addActionListener(event -> {
+			try {
+				checkText();
+				ep = getText(index);
+					if (rad) {
+						re.setCount(Integer.parseInt(tfcon.getText()));
+						
+					if (!rental2.containsKey(tfId.getText())) {
+						re.setEq(ep);
+						rental2.put(tfId.getText(), re);
+						textClear();
+						jm.setVisible(true);
+						dispose();
+					} 
+					else  JOptionPane.showMessageDialog(this, "더이상 신청할 수 없습니다.");	
+					}
+				else {
+					sp.setCount(Integer.parseInt(tfcon.getText()));
+					if (!supple2.containsKey(tfId.getText())) {
+						sp.setEq(ep);
+						supple2.put(tfId.getText(), sp);
+						textClear();
+						jm.setVisible(true);
+						dispose();
+					}
+					else JOptionPane.showMessageDialog(this, "더이상 신청할 수 없습니다.");
+						
+				}
+				
+			} catch (OmmisionException e1) {
+				JOptionPane.showMessageDialog(this, "입력을 해주세요");
+				e1.printStackTrace();}
+			catch(NumberFormatException e2) {
+				JOptionPane.showMessageDialog(this, "수량은 숫자로 입력해주세요");
+			}catch(NullPointerException e3) {
+				JOptionPane.showMessageDialog(this, "라디오 버튼을 클릭해주세요");
+			}
+			
+			});
+
 		commit.setPreferredSize(new Dimension(80, 30));
 		setSize(400, 500);
 		setVisible(true);
@@ -132,6 +188,53 @@ public class Stock extends JFrame {
 				m1[i].setText(nameing[i]);
 				tf[i].setVisible(true);
 			}
+
+	}
+	
+	public void textClear() {
+		tfcon.setText("");
+		for (int i = 0; i<tf.length; i++) {
+			tf[i].setText("");
+		}
+	}
+	
+	public Equipment getText(int index) {
+		int check = (index == 0) ? 5 : (index == 1) ? 4 : 2;
+		String[] str = new String[check];
+		Equipment epa = null;
+		for (int i = 0; i < check; i++) {
+			str[i] = tf[i].getText();
+		}
+		if (index == 0) {
+			Arduino a = new Arduino(str);
+			epa = a;
+		} else if (index == 1) {
+			Raspberry b = new Raspberry(str);
+			epa = b;
+		}
+
+		else if (index == 2) {
+			Module c = new Module(str);
+			epa = c;
+		}
+		return epa;
+	}
+
+	public void checkText() throws OmmisionException {
+		for (int i = 0; i < check; i++) {
+			if (tf[i].getText().trim().equals("") || tfcon.getText().trim().equals("")) {
+				throw new OmmisionException();
+			}
+		}
+	}
+
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		if (Rental.isSelected()) {
+			re = new Rental();
+		} else if (Supple.isSelected()) {
+			sp = new Supple();
+		}
 
 	}
 

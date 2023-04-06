@@ -1,9 +1,19 @@
 package ShareObject;
 
-public class Ardino extends Equipment {
+public class Arduino extends Equipment {
 	private int analogPin;
 	private int digitalPin;
 	private String usbType;
+
+	public Arduino(String[] str) {
+		this.etype = str[0];
+		this.edetailType= str[1];
+		this.analogPin = Integer.valueOf(str[2]);
+		this.digitalPin = Integer.valueOf(str[3]);
+		this.usbType = str[4];
+	}
+
+	
 
 	public int getAnalogPin() {
 		return analogPin;

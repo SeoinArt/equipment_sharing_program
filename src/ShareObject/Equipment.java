@@ -1,8 +1,8 @@
 package ShareObject;
 
 abstract public class Equipment {
-	private String etype;
-	private String edetailType;
+	protected String etype;
+	protected String edetailType;
 	
 	public void setEtype(String etype) {
 		this.etype = etype;

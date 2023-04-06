@@ -8,40 +8,49 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
+import ShareObject.Arduino;
+import ShareObject.Equipment;
+import ShareObject.Module;
+import ShareObject.Raspberry;
+import ShareObject.Rental;
+import ShareObject.Supple;
 import ShareObject.User;
 
 
 
-public class Share extends JFrame{
+public class Share extends JFrame {
 
 	Container cp;
 	JPanel pN = new JPanel(new GridLayout(2, 1)); // 2행 1열
 	JPanel pS = new JPanel(); // FlowLayout 남쪽
 	JTextArea ta; // 중앙
-
-	
 	JPanel pN_sub = new JPanel();
 	JPanel pN_sub_1 = new JPanel();
-
-	
 	JLabel lbTitle, lbName, lbDate, lbNo, lbMsg;
 	JButton btAdd, btList, btDel, btEdit, btEditEnd, btFind;
-
 	JTextField tfName, tfDate, tfNo, tfMsg;
-
+	HashMap<String,Rental> rental = new HashMap<>();
+	HashMap<String,Supple> supple = new HashMap<>();
+	int rev;
+	
 	public Share(User use) {
 		super("::MemoAppView::");
 		cp = this.getContentPane();
@@ -61,17 +70,15 @@ public class Share extends JFrame{
 		
 		pN.add(pN_sub);
 		pN_sub.add(pN_sub_1);
-
-		
-		
+	
 		pN_sub_1.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		pN_sub_1.add(lbName = new JLabel("신청자: "));
+		pN_sub_1.add(lbName = new JLabel("User: "));
 		pN_sub_1.add(tfName = new JTextField(15));
 		tfName.setText(use.getId());
 		tfName.setHorizontalAlignment(JTextField.CENTER);
 		tfName.setEditable(false);
 		
-		pN_sub_1.add(lbDate = new JLabel("User: "));
+		pN_sub_1.add(lbDate = new JLabel("Today: "));
 		pN_sub_1.add(tfDate = new JTextField(10));
 		
 		tfDate.setEditable(false);
@@ -86,13 +93,25 @@ public class Share extends JFrame{
 		pS.setBorder(BorderFactory.createEmptyBorder(10 , 10 , 10 , 10));
 		pS.add(btDel = new JButton("신청"));
 		btDel.addActionListener(event ->{
-			Stock st = new Stock(use); 
-			
-			
+			Stock st = new Stock(this,use,rental,supple); 
 		});
-		pS.add(btEditEnd = new JButton("제공"));
+		pS.add(btEditEnd = new JButton("삭제"));
 		pS.add(btEdit = new JButton("내역"));
+		btEdit.addActionListener(event ->{
+			if(!rental.containsKey(use.getId())&&!supple.containsKey(use.getId())) {
+				JOptionPane.showMessageDialog(cp, "이용한 적이 없습니다.");
+			}
+			else
+			{
+				String[] s = {"신청","공급"};
+				rev = JOptionPane.showOptionDialog(this, "조회 내용을 클릭하세요","조회", 0,1,null, s,s[0]);
+				searchList(rev);
+			}
+		});
 		
+		setSize(800, 500);
+		setLocationRelativeTo(null);
+		setVisible(true);
 		
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -104,19 +123,22 @@ public class Share extends JFrame{
 		return str;
 		
 	}
-
-	public static void main(String[] args) {
-		User use = new User();
-		String str = "a";
-		use.setAddr(str);
-		use.setId(str);
-		use.setName(str);
-		use.setTel(str);
-		
-		Share my = new Share(use);
-		
-		my.setSize(800, 500);
-		my.setLocationRelativeTo(null);
-		my.setVisible(true);
+	public void searchList(int i) {
+		String s = "";
+		if(i==0) {
+			Rental r = rental.get(tfName.getText());
+			if(r.getEq() instanceof Arduino) {
+				s ="Arduino";
+			} 
+			else if (r.getEq() instanceof Raspberry) {
+				s ="Raspberry";
+			}
+			else if (r.getEq() instanceof Module) {
+				s = "Module";
+			}
+		}
+		JOptionPane.showMessageDialog(cp,s);
 	}
+
+	
 }
