@@ -3,6 +3,7 @@ package ShareObject;
 public class Rental {
 	private int count;
 	private Equipment eq;
+
 	
 	public Rental(String count2, Equipment qp) {
 		this.count = Integer.valueOf(count2);

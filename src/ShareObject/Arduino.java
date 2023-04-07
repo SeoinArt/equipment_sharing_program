@@ -6,6 +6,11 @@ public class Arduino extends Equipment {
 	private String digitalPin;
 	private String usbType;
 
+	
+	public Arduino() {
+		
+	}
+	
 	public Arduino(String[] str) {
 		this.etype = str[0];
 		this.edetailType= str[1];
@@ -41,7 +46,7 @@ public class Arduino extends Equipment {
 	}
 
 	@Override
-	int getTotla() {
+	public int getTotla() {
 		return 5;
 	}
 
@@ -57,5 +62,7 @@ public class Arduino extends Equipment {
 		str[4] = getUsbType();
 		return str;
 	}
+
+
 
 }
