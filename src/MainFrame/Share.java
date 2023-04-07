@@ -109,13 +109,11 @@ public class Share extends JFrame {
 			if (rev == 0) {
 				if (hashMap_inCheck_rental(use.getId(), ID_Rental)) {
 					UpdateFrame uf = new UpdateFrame(this, use, ID_Rental, ID_Supple, rev);
-					setVisible(false);
 				} else
 					JOptionPane.showMessageDialog(this, "수정할 내용이 없습니다!!");
 			} else if (rev == 1) {
 				if (hashMap_inCheck_supple(use.getId(), ID_Supple)) {
 					UpdateFrame uf = new UpdateFrame(this, use, ID_Rental, ID_Supple, rev);
-					setVisible(false);
 				} else
 					JOptionPane.showMessageDialog(this, "수정할 내용이 없습니다!!");
 			} else
@@ -147,13 +145,13 @@ public class Share extends JFrame {
 			int rev = JOptionPane.showOptionDialog(this, "조회 내용을 클릭하세요", "조회", 0, 1, null, s, s[0]);
 			if (rev == 0) {
 				if (hashMap_inCheck_rental(use.getId(), ID_Rental)) {
-					
+					searchHashMap(use,ID_Rental,ID_Supple,0);
 				} else
 					sP(this, "신청하신 내용이 없습니다!!");
 
 			} else if (rev == 1) {
 				if (hashMap_inCheck_supple(use.getId(), ID_Supple)) {
-
+					searchHashMap(use,ID_Rental,ID_Supple,1);
 				} else
 					sP(this, "기부하신 내역이 없습니다!!");
 			} else
@@ -169,23 +167,65 @@ public class Share extends JFrame {
 	/**
 	 * HashMap 내역을 검색하는 메서드
 	 */
-	public void searchHashMap(HashMap<String, Rental> ID_Rental, HashMap<String, Supple> ID_Supple,int rev) {
-		if(rev == 0) {
-			Iterator<String> it = ID_Supple.keySet().iterator();
-			StringBuilder str = new StringBuilder("");
-			while(it.hasNext()) {
+	public void searchHashMap(User use,HashMap<String, Rental> ID_Rental, HashMap<String, Supple> ID_Supple, int rev) {
+		StringBuilder str = new StringBuilder("Use ID:   "+use.getId()+"\t");
+		if (rev == 0) {
+			Iterator<String> it = ID_Rental.keySet().iterator();
+			while (it.hasNext()) {
 				String key = it.next();
 				Rental rel = ID_Rental.get(key);
-				str.append(get)
+				str.append((discriminationEq(rel.getEq())).toString());
 			}
+			ta.setText(str.toString());
 		}
-		
-		
+		else if (rev == 1) {
+			Iterator<String> it = ID_Supple.keySet().iterator();
+			while (it.hasNext()) {
+				String key = it.next();
+				Supple rel = ID_Supple.get(key);
+				str.append((discriminationEq(rel.getEq())).toString());
+			}
+			ta.setText(str.toString());
+		}
+
 	}
-	
-	
-	
-	
+
+	/**
+	 * 부품 인스턴스를 확인하고 모든 내용을 출력하는 메서드
+	 */
+	public StringBuilder discriminationEq(Equipment eq) {
+		StringBuilder str = new StringBuilder();
+		if(eq instanceof Arduino) {
+			Arduino ar = (Arduino)eq;
+			String [] arr = ar.getArea();
+			for(int i =0; i<arr.length; i++) {
+				str.append(arr[i]);
+				str.append("\t");
+			}
+			return str;
+		}
+		else if(eq instanceof Raspberry) {
+			Raspberry ar = (Raspberry)eq;
+			String [] arr = ar.getArea();
+			for(int i =0; i<arr.length; i++) {
+				str.append(arr[i]);
+				str.append("\t");
+			}
+			return str;
+		}
+		else if(eq instanceof Module) {
+
+			Module ar = (Module)eq;
+			String [] arr = ar.getArea();
+			for(int i =0; i<arr.length; i++) {
+				str.append(arr[i]);
+				str.append("\t");
+			}
+			return str;
+		}
+		else return null;
+	}
+
 	/**
 	 * JOptionPane이 너무 길어서 사용하는 메소드
 	 * 
@@ -212,8 +252,9 @@ public class Share extends JFrame {
 
 	/**
 	 * 프레임을 변환하는 메서드
+	 * 
 	 * @param jm
-	 * @param i  
+	 * @param i
 	 */
 	public void showFrame(JFrame jm, JFrame i) {
 		jm.setVisible(true);
@@ -222,7 +263,8 @@ public class Share extends JFrame {
 
 	/**
 	 * 오늘 날짜를 String으로 반환하는 메서드
-	 * @return 
+	 * 
+	 * @return
 	 */
 	public String getSysDate() {
 		Date today = new Date(); // java.util.Date
