@@ -146,19 +146,7 @@ public class Stock extends JFrame implements ItemListener {
 		setLocationRelativeTo(null);
 		setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
-
-//	public void checkKey(User use, HashMap<String, Rental> ID_Rental, HashMap<String, Supple> ID_Supple) {
-//		if (ID_Rental.containsKey(use.getId())) {
-//			System.out.println("rental 이미 있음");
-//		} else
-//			System.out.println("rental 아직 없음");
-//		if (ID_Supple.containsKey(use.getId())) {
-//			System.out.println("supple 이미 있음");
-//		} else
-//			System.out.println("supple 아직 없음");
-//	}	
-	
+	}	
 	
 	/**
 	 * 

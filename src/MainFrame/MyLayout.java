@@ -106,6 +106,7 @@ public class MyLayout extends JFrame {
 			}
 		}
 	}
+	
 	/** 아이디와 비밀번호가 매칭되는지 확인하는 메서드
 	 */
 	

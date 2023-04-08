@@ -76,12 +76,12 @@ public class ChangeId extends JFrame {
 		setResizable(false);
 	}
 
-	/**
+	/**textField에 값이 전부 입력되었는지 확인하고, 비밀번호를 변경하는 메서드
 	 * @param use
 	 * @param jt
 	 * @throws OmmisionException
 	 * @throws InconsistencyException
-	 * textField에 값이 전부 입력되었는지 확인하고, 비밀번호를 변경하는 메서드
+	 * 
 	 */
 	public void checkText(HashMap<String, User> use, JTextField[] jt) throws OmmisionException, InconsistencyException {
 

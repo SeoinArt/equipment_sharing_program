@@ -105,7 +105,7 @@ public class Share extends JFrame {
 			setVisible(false);
 		});
 		btUp.addActionListener(event -> {
-			int rev = JOptionPane.showOptionDialog(this, "조회 내용을 클릭하세요", "조회", 0, 1, null, s, s[0]);
+			int rev = JOptionPane.showOptionDialog(this, "수정 내용을 클릭하세요", "조회", 0, 1, null, s, s[0]);
 			if (rev == 0) {
 				if (hashMap_inCheck_rental(use.getId(), ID_Rental)) {
 					UpdateFrame uf = new UpdateFrame(this, use, ID_Rental, ID_Supple, rev);
@@ -122,7 +122,7 @@ public class Share extends JFrame {
 		});
 
 		btDel.addActionListener(event -> {
-			int rev = JOptionPane.showOptionDialog(this, "조회 내용을 클릭하세요", "조회", 0, 1, null, s, s[0]);
+			int rev = JOptionPane.showOptionDialog(this, "삭제 내용을 클릭하세요", "조회", 0, 1, null, s, s[0]);
 			if (rev == 0) {
 				if (hashMap_inCheck_rental(use.getId(), ID_Rental)) {
 					delHashMap_Ren(use.getId(), ID_Rental);

@@ -152,7 +152,6 @@ public class CreateMember extends JFrame {
 	 * textField 내용을 string으로 가져오는 method
 	 */
 
-
 	void textFieldGetText(HashMap<String, User> use) throws OmmisionException {
 		for (int i = 0; i < ta.length; i++) {
 			if (ta[i].getText().equals("")){ 
@@ -188,10 +187,10 @@ public class CreateMember extends JFrame {
 		
 	}
 	/**
-	 * 
+	 * 입력한 텍스트필드의 내용을 회원정보에 업데이트 하는 메서드
 	 * @param text
 	 * @param use
-	 * 입력한 텍스트필드의 내용을 회원정보데 업데이트 하는 메서드
+	 * 
 	 */
 
 	void addUser(String[] text, HashMap<String, User> use) {
@@ -204,7 +203,16 @@ public class CreateMember extends JFrame {
 		use.put(us.getId(), us);
 	}
 
-	// user 정보를 HashMap에 저장
+	/**
+	 * 그리드 레이아웃 위치 설정
+	 * @param x
+	 * @param y
+	 * @param w
+	 * @param h
+	 * @param wx
+	 * @param wy
+	 * @param j
+	 */
 
 	void addGB(int x, int y, int w, int h, double wx, double wy, JPanel j) {
 		gc.gridx = x;
@@ -216,14 +224,25 @@ public class CreateMember extends JFrame {
 		gc.fill = GridBagConstraints.BOTH;
 		mainJP.add(j, gc);
 	}
-	// 그리드 레이아웃 위치 설정
+	/**
+	 * JPanel에 문구가 str인 라벨을 붙이는 메서드
+	 * @param j
+	 * @param l
+	 * @param str
+	 */
+	// 
 
 	void addLb(JPanel j, JLabel l, String str) {
 		j.setLayout(new BorderLayout());
 		l.setText(str);
 		j.add(l);
 	}
-	// 라벨 추가
+	
+	/**
+	 * TextField를 부착하는 메서드
+	 * @param j
+	 * @param tf
+	 */
 
 	void addTa(JPanel j, TextField tf) {
 		j.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -231,5 +250,5 @@ public class CreateMember extends JFrame {
 		j.add(tf, BorderLayout.EAST);
 
 	}
-	// 텍스트 필드 추가
+	
 }
